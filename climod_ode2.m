@@ -1,4 +1,4 @@
-function out=climod_ode2(emis,param,tt,use)
+function out=climod_ode2(emis,conc,param,tt,use)
 
 
 %Project & calc RF for CH4, N2O and HFC134a
@@ -74,6 +74,11 @@ emis_lu=interp1(emis.OtherCO2.time,emis.OtherCO2.val,tt); %landuse
                                                           %emissions,
                                                           %interpolated
                                                           %to tt
+if ~cpl
+ppm_in=interp1(conc.CO2.time,conc.CO2.val,tt);;
+ppm_in=ppm_in./alpha;
+Ca0=ppm_in(1);
+end
 
 for i=1:numel(tt)
 f_nonco2(i)=out.CH4.RFrcp(i)+...
@@ -86,7 +91,7 @@ end
 %%derivatives of temperature and atmos carbon as functions of EBM
 %%and freidlingstein parameters.  Returns solution at tt.  Initial
 %%conditions are tem0 and Ca0
-[t,C] = ode45(@(t,C) tsolve2(C,Ca0,kappa,kappa2,kdeep,lambda,gamma_l,gamma_o,alpha,rho,rho2,beta_l,beta_o,beta_od,f_nonco2,gtc_in,tt,t,cpl,c_amp), tt, [tem0,Ca0,cino(1),cinod(1),tem0]);
+[t,C] = ode45(@(t,C) tsolve2(C,Ca0,kappa,kappa2,kdeep,lambda,gamma_l,gamma_o,alpha,rho,rho2,beta_l,beta_o,beta_od,f_nonco2,gtc_in,tt,t,cpl,c_amp,ppm_in), tt, [tem0,Ca0,cino(1),cinod(1),tem0]);
 
 out.clim.f_co2=6.3*log(C(:,2)/Ca0);
 out.clim.f_nonco2=f_nonco2;

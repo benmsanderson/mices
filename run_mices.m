@@ -17,6 +17,6 @@ paramopt=param;
 end
 
 
-out=climod_ode2(emis{1},paramopt,tt,'all');
+out=climod_ode2(emis{1},conc{1},paramopt,tt,'all');
 plot_out(out,conc{1},temp{1})
 
