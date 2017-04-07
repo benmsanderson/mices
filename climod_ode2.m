@@ -78,6 +78,8 @@ if ~cpl
 ppm_in=interp1(conc.CO2.time,conc.CO2.val,tt);;
 ppm_in=ppm_in./alpha;
 Ca0=ppm_in(1);
+else
+    ppm_in=NaN;
 end
 
 for i=1:numel(tt)
